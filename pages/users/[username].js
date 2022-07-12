@@ -3,13 +3,13 @@ import axios from 'axios';
 
 export async function getServerSideProps(ctx) {
   const { username } = ctx.query;
-  const { status, data } = await axios.get(`https://api.rwnjs.com/04/users/${username}`, {
-    headers: {
-     authorization: process.env.API_TOKEN,
-     },
+  const { status, data } = await axios.get(`https://jsonplaceholder.typicode.com/users/?username=${username}`, {
+    // headers: {
+    //   authorization: process.env.API_TOKEN,
+    // },
   });
 
-  if (status === 404) {
+  if (!data) {
     return {
       notFound: true,
     };
@@ -19,11 +19,14 @@ export async function getServerSideProps(ctx) {
     props: {
       user: data,
     },
-  };
+  
+   };
+  
 }
 
 function UserPage({ user }) {
-  return (
+ console.log(user) 
+ return (
     <div>
       <div>
         <Link href="/" passHref>
@@ -32,13 +35,14 @@ function UserPage({ user }) {
       </div>
       <hr />
       <div style={{ display: 'flex' }}>
-        <img src={user.profile_picture} alt={user.username} width={150} height={150} />
+        {/* <img src={user.profile_picture} alt={user.username} width={150} height={150} /> */}
         <div>
-          <div>
-            <b>Username:</b> {user.username}
+          <div> 
+          {console.log(user)}
+            <b>Username:</b> {String(user.username)}
           </div>
           <div>
-            <b>Full name:</b> {user.first_name} {user.last_name}
+            <b>Full name:</b> {user.id} {user.last_name}
           </div>
           <div>
             <b>Email:</b> {user.email}

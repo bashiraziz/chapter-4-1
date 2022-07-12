@@ -1,20 +1,23 @@
 import Link from 'next/link';
 import axios from 'axios';
-import {useEffect} from 'react'
+import useSWR from 'swr';
 
 export async function getServerSideProps() {
-  const { data } = await axios.get('https://api.rwnjs.com/04/users');
+  const { data, error } = await axios.get(`https://jsonplaceholder.typicode.com/users`);
 
   return {
-   props: {
-     users: data,
+    props: {
+      users: data,
     },
   };
 }
 
 function HomePage({ users }) {
+  console.log(users)
   return (
+   
     <ul>
+      
       {users.map((user) => (
         <li key={user.id}>
           <Link href={`/users/${user.username}`} passHref>
@@ -22,7 +25,7 @@ function HomePage({ users }) {
           </Link>
         </li>
       ))}
-  n  </ul>
+    </ul>
   );
 }
 
