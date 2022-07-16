@@ -1,14 +1,18 @@
 import Link from 'next/link';
 import axios from 'axios';
 
-export async function getServerSideProps(ctx) {
-  const { username } = ctx.query;
+export async function getServerSideProps(context) {
+
+  const { username } = context.query;
+  
   const { status, data } = await axios.get(`https://jsonplaceholder.typicode.com/users/?username=${username}`, {
     // headers: {
     //   authorization: process.env.API_TOKEN,
     // },
   });
-
+  
+  
+  
   if (!data) {
     return {
       notFound: true,
@@ -26,6 +30,10 @@ export async function getServerSideProps(ctx) {
 
 function UserPage({ user }) {
  console.log(user) 
+ 
+  const userIndex = user.findIndex(x => x.username ===`${x.username}`);
+  console.log(userIndex);
+
  return (
     <div>
       <div>
@@ -35,23 +43,29 @@ function UserPage({ user }) {
       </div>
       <hr />
       <div style={{ display: 'flex' }}>
-        {/* <img src={user.profile_picture} alt={user.username} width={150} height={150} /> */}
+         <img src='https://picsum.photos/200' alt={user[userIndex].username} width={150} height={150} />
         <div>
           <div> 
           {console.log(user)}
-            <b>Username:</b> {String(user.username)}
+            <b>Username:</b> {user[userIndex].username}
           </div>
           <div>
-            <b>Full name:</b> {user.id} {user.last_name}
+            <b>Full name:</b> {user[userIndex].name}
           </div>
           <div>
-            <b>Email:</b> {user.email}
+            <b>Email:</b> {user[userIndex].email}
           </div>
           <div>
-            <b>Company:</b> {user.company}
+            <b>Company:</b> {user[userIndex].company.name}
           </div>
           <div>
-            <b>Job title:</b> {user.job_title}
+            <b>ID:</b> {user[userIndex].id}
+          </div>
+          <div>
+            <b>Phone:</b> {user[userIndex].phone}
+          </div>
+          <div>
+            <b>Web Site:</b> {user[userIndex].website}
           </div>
         </div>
       </div>
